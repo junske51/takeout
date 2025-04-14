@@ -10,6 +10,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.MissingFlavorException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
@@ -43,6 +44,7 @@ public class DishServiceImpl implements DishService {
      * @param dishDTO
      */
     @Transactional
+
     public void saveWithFlavor(DishDTO dishDTO) {
 
         Dish dish = new Dish();
@@ -55,6 +57,19 @@ public class DishServiceImpl implements DishService {
         Long dishId = dish.getId();
 
         List<DishFlavor> flavors = dishDTO.getFlavors();
+        if (flavors == null || flavors.isEmpty()) {
+            throw new MissingFlavorException("未添加口味");
+        }
+
+        // 检查每个口味是否有效（name 和 value 不能为空）
+        for (DishFlavor flavor : flavors) {
+            if (flavor.getName() == null || flavor.getName().isEmpty()) {
+                throw new MissingFlavorException("口味名称不能为空");
+            }
+            if (flavor.getValue() == null || flavor.getValue().isEmpty()) {
+                throw new MissingFlavorException("口味值不能为空");
+            }
+        }
         if (flavors != null && flavors.size() > 0) {
             flavors.forEach(dishFlavor -> {
                 dishFlavor.setDishId(dishId);

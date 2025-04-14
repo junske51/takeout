@@ -42,6 +42,10 @@ sky:
     access-key-id: ${sky.alioss.access-key-id}
     access-key-secret: ${sky.alioss.access-key-secret}
     bucket-name: ${sky.alioss.bucket-name}
+  shop:
+    address: 南京市栖霞区
+  baidu:
+    ak: r2Jldy9VMN6XjpaP0lgNPw4LUDBMJ0qsa
   wechat:
     appid: ${sky.wechat.appid}
     secret: ${sky.wechat.secret}

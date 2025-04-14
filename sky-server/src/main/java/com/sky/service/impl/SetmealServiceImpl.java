@@ -42,7 +42,7 @@ public class SetmealServiceImpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO,setmeal);
         setmealMapper.insert(setmeal);
         Long setmealId = setmeal.getId();
-        List<SetmealDish> setmealDishes = setmealMapper.getBySetmealId(setmealId);
+        List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         setmealDishes.forEach(
                 setmealDish -> {
                     setmealDish.setSetmealId(setmealId);
@@ -58,7 +58,7 @@ public class SetmealServiceImpl implements SetmealService {
         int pageNum = setmealPageQueryDTO.getPage();
         int pageSize = setmealPageQueryDTO.getPageSize();
         PageHelper.startPage(pageNum,pageSize);
-        Page<SetmealDTO> page=setmealMapper.pageQuery(setmealPageQueryDTO);
+        Page<SetmealVO> page=setmealMapper.pageQuery(setmealPageQueryDTO);
         return new PageResult(page.getTotal(),page.getResult());
     }
 
@@ -79,11 +79,13 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     public SetmealVO getByIdWithDish(Long id) {
-        Setmeal setmeal=setmealMapper.getById(id);
-        List<SetmealDish> setmealDishes=setmealMapper.getBySetmealId(id);
+        Setmeal setmeal = setmealMapper.getById(id);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+
         SetmealVO setmealVO = new SetmealVO();
         BeanUtils.copyProperties(setmeal, setmealVO);
         setmealVO.setSetmealDishes(setmealDishes);
+
         return setmealVO;
     }
 

@@ -8,11 +8,13 @@ import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SetmealMapper {
@@ -30,7 +32,7 @@ public interface SetmealMapper {
     void insert(Setmeal setmeal);
 
 
-    Page<SetmealDTO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+    Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
 
     @Delete("delete from setmeal where id = #{id}")
@@ -52,13 +54,11 @@ public interface SetmealMapper {
      */
     List<Setmeal> list(Setmeal setmeal);
 
-    /**
-     * 根据套餐id查询菜品选项
-     * @param setmealId
-     * @return
-     */
+//  根据套餐id查询菜品选项
+
     @Select("select sd.name, sd.copies, d.image, d.description " +
             "from setmeal_dish sd left join dish d on sd.dish_id = d.id " +
             "where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+    Integer countByMap(Map map);
 }
